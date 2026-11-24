@@ -6,5 +6,5 @@
   "dataClassification": "PUBLIC",
   "protected": false,
   "authConfigured": false,
-  "approvedGates": ["G1"]
+  "approvedGates": ["G1", "G2"]
 }
