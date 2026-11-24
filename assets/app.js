@@ -155,7 +155,7 @@
     const dm = safeAsset(config.assets.dm);
     return `
       <main id="main-content">
-        <section class="home-hero">
+        <section class="home-hero" id="home-intro" data-scroll-section data-section-label="活動首頁">
           <div class="shell home-hero-grid">
             <div class="home-copy reveal">
               <p class="eyebrow">2026 H2 HACKATHON</p>
@@ -172,7 +172,7 @@
           </div>
         </section>
 
-        <section class="section dm-section" aria-labelledby="dm-title">
+        <section class="section dm-section" id="event-info" data-scroll-section data-section-label="活動資訊" aria-labelledby="dm-title">
           <div class="shell">
             <div class="section-heading reveal">
               <div><p class="eyebrow">EVENT INFORMATION</p><h2 id="dm-title">活動資訊</h2></div>
@@ -184,7 +184,7 @@
           </div>
         </section>
 
-        <section class="section guide-section" id="event-guide" aria-labelledby="guide-title">
+        <section class="section guide-section" id="event-guide" data-scroll-section data-section-label="活動導覽" aria-labelledby="guide-title">
           <div class="shell">
             <div class="section-heading reveal">
               <div><p class="eyebrow">EVENT GUIDE</p><h2 id="guide-title">活動導覽</h2></div>
@@ -205,7 +205,7 @@
           </div>
         </section>
 
-        <section class="section event-summary-section">
+        <section class="section event-summary-section" id="event-summary" data-scroll-section data-section-label="活動摘要">
           <div class="shell event-summary reveal">
             <div><p class="eyebrow">SAVE THE DATE</p><h2>${escapeHtml(config.event.date)}</h2></div>
             <div><strong>${escapeHtml(config.event.time)}</strong><span>${escapeHtml(config.event.venue)}・${escapeHtml(config.event.address)}</span></div>
@@ -375,6 +375,119 @@
     items.forEach((item) => observer.observe(item));
   }
 
+  function setupSectionNavigation() {
+    const sections = Array.from(document.querySelectorAll("[data-scroll-section]"));
+    if (currentPage !== "home" || sections.length < 2) return;
+
+    const rail = document.createElement("aside");
+    rail.className = "mobile-section-rail";
+    rail.setAttribute("aria-label", "首頁區塊導覽");
+    rail.innerHTML = `
+      <div class="mobile-scroll-status" role="status" aria-live="polite"></div>
+      <div class="mobile-section-dots">
+        ${sections.map((section, index) => `<button type="button" data-section-index="${index}" aria-label="前往${escapeHtml(section.dataset.sectionLabel)}"><span aria-hidden="true"></span></button>`).join("")}
+      </div>`;
+    document.body.appendChild(rail);
+
+    const dots = Array.from(rail.querySelectorAll("[data-section-index]"));
+    const status = rail.querySelector(".mobile-scroll-status");
+    const mobileQuery = window.matchMedia("(max-width: 600px)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let currentIndex = 0;
+    let settleTimer;
+    let statusTimer;
+    let snapping = false;
+
+    const headerHeight = () => document.querySelector(".site-header")?.offsetHeight || 0;
+    const sectionTop = (section) => section.getBoundingClientRect().top + window.scrollY;
+    const targetTop = (section) => Math.max(0, sectionTop(section) - headerHeight());
+
+    const updateActive = () => {
+      const marker = window.scrollY + headerHeight() + Math.min(window.innerHeight * 0.34, 280);
+      let nextIndex = 0;
+      sections.forEach((section, index) => {
+        if (sectionTop(section) <= marker) nextIndex = index;
+      });
+      currentIndex = nextIndex;
+      dots.forEach((dot, index) => {
+        const active = index === currentIndex;
+        dot.classList.toggle("is-active", active);
+        if (active) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+      status.textContent = `${sections[currentIndex].dataset.sectionLabel}・${currentIndex + 1} / ${sections.length}`;
+    };
+
+    const showScrollStatus = () => {
+      if (!mobileQuery.matches) return;
+      status.classList.add("is-visible");
+      clearTimeout(statusTimer);
+      statusTimer = setTimeout(() => status.classList.remove("is-visible"), 1000);
+    };
+
+    const scrollToSection = (index) => {
+      const section = sections[index];
+      if (!section) return;
+      snapping = true;
+      window.scrollTo({
+        top: targetTop(section),
+        behavior: reducedMotion.matches ? "auto" : "smooth"
+      });
+      window.setTimeout(() => { snapping = false; }, reducedMotion.matches ? 80 : 650);
+    };
+
+    const settleSection = () => {
+      if (snapping) return;
+      const header = headerHeight();
+      const anchor = window.scrollY + header;
+      const viewport = Math.max(1, window.innerHeight - header);
+      const documentBottom = document.documentElement.scrollHeight - window.innerHeight;
+      if (window.scrollY >= documentBottom - 4) return;
+
+      let index = 0;
+      sections.forEach((section, sectionIndex) => {
+        if (sectionTop(section) <= anchor + 2) index = sectionIndex;
+      });
+
+      const section = sections[index];
+      const top = sectionTop(section);
+      const height = section.offsetHeight;
+      const progress = Math.max(0, anchor - top);
+      let targetIndex = index;
+
+      if (height <= viewport * 1.25) {
+        if (progress >= height * 0.35) {
+          if (index >= sections.length - 1) return;
+          targetIndex = index + 1;
+        }
+      } else if (progress <= viewport * 0.18) {
+        targetIndex = index;
+      } else if (height - progress <= viewport * 0.35) {
+        if (index >= sections.length - 1) return;
+        targetIndex = index + 1;
+      } else {
+        return;
+      }
+
+      if (Math.abs(window.scrollY - targetTop(sections[targetIndex])) > 8) scrollToSection(targetIndex);
+    };
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => scrollToSection(Number(dot.dataset.sectionIndex)));
+    });
+
+    window.addEventListener("scroll", () => {
+      updateActive();
+      showScrollStatus();
+      if (snapping) return;
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settleSection, 180);
+    }, { passive: true });
+
+    window.addEventListener("resize", updateActive, { passive: true });
+    updateActive();
+  }
+
   renderHeader();
   const app = document.querySelector("#app");
   const renderer = renderers[currentPage] || renderers.notFound;
@@ -382,5 +495,5 @@
   renderFooter();
   setupSeatingTabs();
   setupReveal();
+  setupSectionNavigation();
 })();
-

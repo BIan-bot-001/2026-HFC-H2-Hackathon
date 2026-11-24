@@ -19,17 +19,6 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-async function revealFullPage(page) {
-  await page.evaluate(async () => {
-    for (let y = 0; y < document.documentElement.scrollHeight; y += Math.max(300, window.innerHeight * 0.7)) {
-      window.scrollTo(0, y);
-      await new Promise((resolve) => setTimeout(resolve, 90));
-    }
-    window.scrollTo(0, 0);
-  });
-  await page.waitForTimeout(300);
-}
-
 (async () => {
   fs.mkdirSync(outputDir, { recursive: true });
   const browser = await chromium.launch({
@@ -63,11 +52,22 @@ async function revealFullPage(page) {
       }
 
       await page.goto(`${baseUrl}/index.html`, { waitUntil: "networkidle" });
+      assert(await page.locator(".site-header").evaluate((element) => getComputedStyle(element).position) === "fixed", `${viewport.name}: header is not fixed`);
       if (viewport.name === "mobile") {
         const toggle = page.locator(".nav-toggle");
         await toggle.click();
         assert(await toggle.getAttribute("aria-expanded") === "true", "mobile: menu did not open");
         assert(await page.locator("#primary-nav").evaluate((element) => getComputedStyle(element).display) === "grid", "mobile: menu not visible");
+        await toggle.click();
+        assert(await page.locator(".mobile-section-dots button").count() === 4, "mobile: section indicator count is incorrect");
+        assert(await page.locator(".mobile-section-rail").isVisible(), "mobile: section indicator is not visible");
+        await page.evaluate(() => window.scrollTo(0, 180));
+        await page.waitForTimeout(80);
+        assert(await page.locator(".mobile-scroll-status").evaluate((element) => element.classList.contains("is-visible")), "mobile: scroll status did not appear");
+        await page.waitForTimeout(1900);
+        assert(!await page.locator(".mobile-scroll-status").evaluate((element) => element.classList.contains("is-visible")), "mobile: scroll status did not hide after one second of inactivity");
+      } else {
+        assert(await page.locator(".mobile-section-rail").evaluate((element) => getComputedStyle(element).display) === "none", `${viewport.name}: mobile indicator should be hidden`);
       }
 
       const undersized = await page.locator("a, button").evaluateAll((elements) => elements
@@ -91,12 +91,18 @@ async function revealFullPage(page) {
       assert(await backTab.getAttribute("aria-selected") === "true", `${viewport.name}: seating keyboard switch failed`);
       assert(await page.locator("#seat-back").isVisible(), `${viewport.name}: back seating panel not visible`);
 
+      await page.goto(`${baseUrl}/index.html`, { waitUntil: "networkidle" });
+      const snapTarget = await page.locator("#event-info").evaluate((element) => element.getBoundingClientRect().top + window.scrollY - document.querySelector(".site-header").offsetHeight);
+      const heroHeight = await page.locator("#home-intro").evaluate((element) => element.offsetHeight);
+      await page.evaluate((distance) => window.scrollTo(0, distance), heroHeight * 0.4);
+      await page.waitForTimeout(1200);
+      const snappedY = await page.evaluate(() => window.scrollY);
+      assert(Math.abs(snappedY - snapTarget) <= 12, `${viewport.name}: 35% section settling failed (${snappedY} vs ${snapTarget})`);
+
       if (viewport.name === "mobile" || viewport.name === "desktop") {
         await page.goto(`${baseUrl}/index.html`, { waitUntil: "networkidle" });
-        await revealFullPage(page);
         await page.screenshot({ path: path.join(outputDir, `home-${viewport.name}.png`), fullPage: true });
         await page.goto(`${baseUrl}/seating.html`, { waitUntil: "networkidle" });
-        await revealFullPage(page);
         await page.screenshot({ path: path.join(outputDir, `seating-${viewport.name}.png`), fullPage: true });
       }
       await context.close();
