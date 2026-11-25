@@ -1,6 +1,7 @@
 const { chromium } = require("playwright");
 const fs = require("fs");
 const path = require("path");
+const { pathToFileURL } = require("url");
 
 const baseUrl = process.env.SITE_BASE_URL || "http://127.0.0.1:4173";
 const outputDir = path.join(__dirname, "..", ".codex_work", "screenshots");
@@ -60,6 +61,8 @@ function assert(condition, message) {
       assert(await page.locator(".site-header").evaluate((element) => getComputedStyle(element).position) === "fixed", `${viewport.name}: header is not fixed`);
       assert(await page.locator(".event-meta dd").first().evaluate((element) => parseFloat(getComputedStyle(element).fontSize)) >= 28, `${viewport.name}: event details are smaller than 28px`);
       assert(await page.locator(".dm-frame img").count() === 1, `${viewport.name}: event EDM is missing`);
+      assert((await page.locator("#event-dm h2").textContent() || "").trim() === "活動 DM", `${viewport.name}: event DM heading is incorrect`);
+      assert(await page.locator("#event-dm .section-heading > p").count() === 0, `${viewport.name}: event DM explanatory copy should be removed`);
       if (viewport.name === "mobile") {
         const toggle = page.locator(".nav-toggle");
         await toggle.click();
@@ -130,8 +133,15 @@ function assert(condition, message) {
     assert(hiddenReveal === 0, "reduced motion: reveal content remained hidden");
     await reducedContext.close();
 
+    const fileContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const filePage = await fileContext.newPage();
+    await filePage.goto(pathToFileURL(path.join(__dirname, "..", "agenda.html")).href, { waitUntil: "domcontentloaded" });
+    assert(await filePage.locator(".agenda-item").count() === 18, "file preview: synchronized agenda fallback did not render 18 rows");
+    assert((await filePage.locator("#agenda-status").textContent() || "").includes("本機直接預覽"), "file preview: local preview status is incorrect");
+    await fileContext.close();
+
     assert(errors.length === 0, errors.join("\n"));
-    console.log(`PASS: ${pages.length} pages × 3 viewports, Excel agenda, event assets, navigation, keyboard tabs, touch targets, reduced motion`);
+    console.log(`PASS: ${pages.length} pages × 3 viewports, HTTP Excel agenda, direct-file fallback, event assets, navigation, keyboard tabs, touch targets, reduced motion`);
     console.log(`Screenshots: ${outputDir}`);
   } finally {
     await browser.close();

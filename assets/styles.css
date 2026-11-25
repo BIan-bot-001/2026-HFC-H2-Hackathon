@@ -98,7 +98,8 @@ p { text-wrap: pretty; }
 .button-secondary:active { background: #c7e0ff; }
 
 .section { padding-block: clamp(72px, 9vw, 124px); }
-.dm-section { background: var(--color-bg); }
+.dm-section { padding-top: 32px; background: var(--color-bg); }
+.dm-section .section-heading { margin-bottom: 24px; }
 .guide-section { padding-block: 38px 76px; background: #fff; }
 .guide-section .section-heading { margin-bottom: 26px; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 50px; margin-bottom: 42px; }
@@ -261,6 +262,7 @@ p { text-wrap: pretty; }
   .event-meta dd { font-size: 28px; }
   .button { width: 100%; }
   .section { padding-block: 66px; }
+  .dm-section { padding-top: 24px; }
   .section-heading { align-items: start; flex-direction: column; gap: 12px; margin-bottom: 30px; }
   .dm-placeholder { min-height: 330px; grid-template-columns: 1fr; gap: 25px; text-align: center; }
   .dm-placeholder > span { width: 100px; margin-inline: auto; }

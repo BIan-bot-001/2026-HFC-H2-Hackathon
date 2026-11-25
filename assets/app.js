@@ -195,11 +195,10 @@
           </div>
         </section>
 
-        <section class="section dm-section" id="event-info" data-scroll-section data-section-label="活動資訊" aria-labelledby="dm-title">
+        <section class="section dm-section" id="event-dm" data-scroll-section data-section-label="活動 DM" aria-labelledby="dm-title">
           <div class="shell">
             <div class="section-heading reveal">
-              <div><p class="eyebrow">EVENT INFORMATION</p><h2 id="dm-title">活動資訊</h2></div>
-              <p>查看活動時間、地點與主題資訊。</p>
+              <div><p class="eyebrow">EVENT DM</p><h2 id="dm-title">活動 DM</h2></div>
             </div>
             ${dm
               ? `<figure class="dm-frame reveal"><img src="${escapeHtml(dm)}" alt="${escapeHtml(config.event.name)} 活動 DM" loading="lazy"></figure>`
@@ -223,7 +222,7 @@
   }
 
   function renderAgenda() {
-    const fallbackAgenda = config.agenda.map((item) => ({ ...item, unit: "", speaker: "", reviewers: "", isBreak: false }));
+    const fallbackAgenda = config.agenda.map((item) => ({ unit: "", speaker: "", reviewers: "", isBreak: false, ...item }));
     return `<main id="main-content">
       ${pageHero("AGENDA", "黑客松議程", "掌握活動流程與每個階段的時間安排。")}
       <section class="section"><div class="shell content-layout">
@@ -243,6 +242,12 @@
     if (!list || !status || !workbookPath || !window.XLSX) {
       if (list) list.setAttribute("aria-busy", "false");
       if (status) status.textContent = "議程備援資料";
+      return;
+    }
+
+    if (window.location.protocol === "file:") {
+      list.setAttribute("aria-busy", "false");
+      status.textContent = `本機直接預覽・顯示 Excel 同步資料・共 ${config.agenda.length} 筆`;
       return;
     }
 
@@ -283,9 +288,9 @@
       status.textContent = `已讀取 Excel・共 ${agenda.length} 筆`;
       setupReveal(list);
     } catch (error) {
-      console.error("議程 Excel 讀取失敗", error);
+      console.warn("議程 Excel 無法即時讀取，已改用同步備援資料。", error);
       list.setAttribute("aria-busy", "false");
-      status.textContent = "Excel 讀取失敗・顯示備援資料";
+      status.textContent = `Excel 即時讀取不可用・已顯示同步資料・共 ${config.agenda.length} 筆`;
       status.classList.add("status-pending");
     }
   }
