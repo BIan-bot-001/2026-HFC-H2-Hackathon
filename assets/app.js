@@ -172,18 +172,6 @@
           </div>
         </section>
 
-        <section class="section dm-section" id="event-info" data-scroll-section data-section-label="活動資訊" aria-labelledby="dm-title">
-          <div class="shell">
-            <div class="section-heading reveal">
-              <div><p class="eyebrow">EVENT INFORMATION</p><h2 id="dm-title">活動資訊</h2></div>
-              <p>活動 DM 將呈現完整資訊；正式圖片提供前，先保留活動資料與版位。</p>
-            </div>
-            ${dm
-              ? `<figure class="dm-frame reveal"><img src="${escapeHtml(dm)}" alt="${escapeHtml(config.event.name)} 活動 DM" loading="lazy"></figure>`
-              : `<div class="dm-placeholder reveal"><span>DM</span><div><h3>活動 DM 即將更新</h3><p>${escapeHtml(config.event.date)}・${escapeHtml(config.event.time)}・${escapeHtml(config.event.venue)}</p></div></div>`}
-          </div>
-        </section>
-
         <section class="section guide-section" id="event-guide" data-scroll-section data-section-label="活動導覽" aria-labelledby="guide-title">
           <div class="shell">
             <div class="section-heading reveal">
@@ -194,8 +182,7 @@
               ${navigationCards.map((card, index) => {
                 const page = pageById(card.id);
                 return `<a class="guide-card reveal delay-${(index % 3) + 1}" href="${page.href}">
-                  <span class="guide-number">${card.number}</span>
-                  <span class="guide-icon">${icon(card.icon)}</span>
+                  <span class="guide-card-meta"><span class="guide-number">${card.number}</span><span class="guide-icon">${icon(card.icon)}</span></span>
                   <h3>${escapeHtml(card.title)}</h3>
                   <p>${escapeHtml(card.description)}</p>
                   <span class="card-link">查看資訊 ${icon("arrow")}</span>
@@ -205,10 +192,15 @@
           </div>
         </section>
 
-        <section class="section event-summary-section" id="event-summary" data-scroll-section data-section-label="活動摘要">
-          <div class="shell event-summary reveal">
-            <div><p class="eyebrow">SAVE THE DATE</p><h2>${escapeHtml(config.event.date)}</h2></div>
-            <div><strong>${escapeHtml(config.event.time)}</strong><span>${escapeHtml(config.event.venue)}・${escapeHtml(config.event.address)}</span></div>
+        <section class="section dm-section" id="event-info" data-scroll-section data-section-label="活動資訊" aria-labelledby="dm-title">
+          <div class="shell">
+            <div class="section-heading reveal">
+              <div><p class="eyebrow">EVENT INFORMATION</p><h2 id="dm-title">活動資訊</h2></div>
+              <p>活動 DM 將呈現完整資訊；正式圖片提供前，先保留活動資料與版位。</p>
+            </div>
+            ${dm
+              ? `<figure class="dm-frame reveal"><img src="${escapeHtml(dm)}" alt="${escapeHtml(config.event.name)} 活動 DM" loading="lazy"></figure>`
+              : `<div class="dm-placeholder reveal"><span>DM</span><div><h3>活動 DM 即將更新</h3><p>${escapeHtml(config.event.date)}・${escapeHtml(config.event.time)}・${escapeHtml(config.event.venue)}</p></div></div>`}
           </div>
         </section>
       </main>`;
