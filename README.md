@@ -2,7 +2,7 @@
 
 本專案為活動當日使用的繁體中文響應式靜態網站，預計部署至 GitHub Pages。
 
-目前狀態：G1、G2 已核准；網站功能與本機測試已完成。正式活動素材、外部連結、G3 驗收及 G4 部署核准仍待完成。
+目前狀態：G1、G2 已核准；網站功能、EDM、Excel 議程、背對舞台座位圖、外部連結與本機測試已完成。面對舞台圖、G3 使用者驗收及 G4 部署核准仍待完成。
 
 ## 重要公開性說明
 
@@ -20,8 +20,9 @@ python -m http.server 4173
 
 ## 內容更新
 
-- 活動文字、議程、外部連結：`assets/data.js`
-- DM：將圖片放入 `assets/images/`，再更新 `assets.dm`
+- 活動文字與外部連結：`assets/data.js`
+- 議程：編輯專案根目錄的 `黑客松議程.xlsx`，保留「時間表」第 3–20 列與原欄位位置
+- DM：直接替換專案根目錄的 `2026 H2黑客松EDM.png`
 - 面對／背對舞台座位圖：將圖片放入 `assets/images/`，再更新 `assets.seatingFront` 與 `assets.seatingBack`
 - 詳細步驟：`docs/content-update-guide.md`
 
@@ -42,4 +43,3 @@ python -m http.server 4173
 - 測試報告：`docs/test-report.md`
 - 部署、回復與下架：`docs/deployment-runbook.md`
 - 公開產物雜湊：`docs/artifact-manifest.sha256`
-
