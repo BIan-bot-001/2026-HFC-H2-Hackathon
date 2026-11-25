@@ -15,9 +15,9 @@ window.HACKATHON_CONFIG = Object.freeze({
     seatingBack: ""
   },
   links: {
-    checkinForm: "",
-    feedbackForm: "",
-    teamsLive: "",
+    checkinForm: "https://forms.cloud.microsoft/r/ZNM1tjXrX9",
+    feedbackForm: "https://forms.cloud.microsoft/r/KPpSm1gjmG",
+    teamsLive: "https://teams.microsoft.com/meet/486508844550619?p=iW5u2UlYY8srfVZNzU",
     map: "https://www.google.com/maps/search/?api=1&query=台北市松江路350號"
   },
   agenda: [

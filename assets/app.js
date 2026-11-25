@@ -160,7 +160,7 @@
             <div class="home-copy reveal">
               <p class="eyebrow">2026 H2 HACKATHON</p>
               <h1>一起把想法，<span>變成下一步。</span></h1>
-              <p class="hero-lead">${escapeHtml(config.event.name)}，集結創意、協作與行動，在四小時內探索更多可能。</p>
+              <p class="hero-lead">${escapeHtml(config.event.name)}，讓我們攜手串聯數據、看見成果、探索落地解方的無限可能。</p>
               <dl class="event-meta">
                 <div><dt>日期</dt><dd>${escapeHtml(config.event.date)}</dd></div>
                 <div><dt>時間</dt><dd>${escapeHtml(config.event.time)}</dd></div>
