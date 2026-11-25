@@ -49,10 +49,17 @@ function assert(condition, message) {
         assert(overflow <= 1, `${viewport.name}/${file}: horizontal overflow ${overflow}px`);
         const brokenImages = await page.locator("img").evaluateAll((images) => images.filter((image) => image.complete && image.naturalWidth === 0).map((image) => image.src));
         assert(brokenImages.length === 0, `${viewport.name}/${file}: broken images ${brokenImages.join(", ")}`);
+        if (file === "agenda.html") {
+          await page.waitForFunction(() => document.querySelector("#agenda-list")?.getAttribute("aria-busy") === "false");
+          assert(await page.locator(".agenda-item").count() === 18, `${viewport.name}: Excel agenda did not render 18 rows`);
+          assert((await page.locator("#agenda-status").textContent() || "").includes("已讀取 Excel"), `${viewport.name}: Excel agenda status is incorrect`);
+        }
       }
 
       await page.goto(`${baseUrl}/index.html`, { waitUntil: "domcontentloaded" });
       assert(await page.locator(".site-header").evaluate((element) => getComputedStyle(element).position) === "fixed", `${viewport.name}: header is not fixed`);
+      assert(await page.locator(".event-meta dd").first().evaluate((element) => parseFloat(getComputedStyle(element).fontSize)) >= 28, `${viewport.name}: event details are smaller than 28px`);
+      assert(await page.locator(".dm-frame img").count() === 1, `${viewport.name}: event EDM is missing`);
       if (viewport.name === "mobile") {
         const toggle = page.locator(".nav-toggle");
         await toggle.click();
@@ -86,6 +93,8 @@ function assert(condition, message) {
       await page.goto(`${baseUrl}/seating.html`, { waitUntil: "domcontentloaded" });
       const frontTab = page.locator("#seat-tab-front");
       const backTab = page.locator("#seat-tab-back");
+      assert(await backTab.getAttribute("aria-selected") === "true", `${viewport.name}: provided back seating view is not the default`);
+      assert(await page.locator("#seat-back img").count() === 1, `${viewport.name}: back seating image is missing`);
       await frontTab.focus();
       await frontTab.press("ArrowRight");
       assert(await backTab.getAttribute("aria-selected") === "true", `${viewport.name}: seating keyboard switch failed`);
@@ -102,8 +111,14 @@ function assert(condition, message) {
       if (viewport.name === "mobile" || viewport.name === "desktop") {
         await page.goto(`${baseUrl}/index.html`, { waitUntil: "domcontentloaded" });
         await page.screenshot({ path: path.join(outputDir, `home-${viewport.name}.png`), fullPage: true });
+        await page.locator(".event-meta").screenshot({ path: path.join(outputDir, `home-event-details-${viewport.name}.png`) });
+        await page.goto(`${baseUrl}/agenda.html`, { waitUntil: "domcontentloaded" });
+        await page.waitForFunction(() => document.querySelector("#agenda-list")?.getAttribute("aria-busy") === "false");
+        await page.screenshot({ path: path.join(outputDir, `agenda-${viewport.name}.png`), fullPage: true });
         await page.goto(`${baseUrl}/seating.html`, { waitUntil: "domcontentloaded" });
         await page.screenshot({ path: path.join(outputDir, `seating-${viewport.name}.png`), fullPage: true });
+        await page.goto(`${baseUrl}/transport.html`, { waitUntil: "domcontentloaded" });
+        await page.screenshot({ path: path.join(outputDir, `transport-${viewport.name}.png`), fullPage: true });
       }
       await context.close();
     }
@@ -116,7 +131,7 @@ function assert(condition, message) {
     await reducedContext.close();
 
     assert(errors.length === 0, errors.join("\n"));
-    console.log(`PASS: ${pages.length} pages × 3 viewports, navigation, keyboard tabs, touch targets, reduced motion`);
+    console.log(`PASS: ${pages.length} pages × 3 viewports, Excel agenda, event assets, navigation, keyboard tabs, touch targets, reduced motion`);
     console.log(`Screenshots: ${outputDir}`);
   } finally {
     await browser.close();

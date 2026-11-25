@@ -6,19 +6,26 @@ window.HACKATHON_CONFIG = Object.freeze({
     venue: "IEAT 一樓會議室",
     address: "台北市松江路350號",
     organizers: ["資訊部", "人發室"],
-    updatedAt: "2026/11/24"
+    updatedAt: "2026/11/25"
   },
   assets: {
     logo: "assets/images/hotai-finance-logo.png",
-    dm: "",
+    dm: "2026 H2黑客松EDM.png",
+    agendaWorkbook: "黑客松議程.xlsx",
     seatingFront: "",
-    seatingBack: ""
+    seatingBack: "座位圖-背對舞台.png"
   },
   links: {
     checkinForm: "https://forms.cloud.microsoft/r/ZNM1tjXrX9",
     feedbackForm: "https://forms.cloud.microsoft/r/KPpSm1gjmG",
     teamsLive: "https://teams.microsoft.com/meet/486508844550619?p=iW5u2UlYY8srfVZNzU",
-    map: "https://www.google.com/maps/search/?api=1&query=台北市松江路350號"
+    map: "https://www.google.com/maps/search/?api=1&query=台北市松江路350號",
+    venueTraffic: "https://www.ieatpe.org.tw/meeting/Traffic.aspx"
+  },
+  agendaSource: {
+    sheet: "時間表",
+    firstRow: 3,
+    lastRow: 20
   },
   agenda: [
     { time: "13:00", title: "活動開始", detail: "詳細議程待更新", type: "opening" },
@@ -33,14 +40,15 @@ window.HACKATHON_CONFIG = Object.freeze({
     },
     {
       title: "大眾運輸",
-      detail: "交通方式待更新",
-      note: "正式資訊提供後，可直接在本設定檔更新。"
+      detail: "捷運中和新蘆線・行天宮站",
+      note: "由 4 號出口出站後左轉，約 100 公尺，步行約 2 分鐘。"
     },
     {
-      title: "自行前往",
-      detail: "請使用地圖按鈕開啟導航",
-      note: "停車與入口資訊待更新。"
+      title: "開車前往",
+      detail: "導航至台北市松江路 350 號",
+      note: "IEAT 官網提供周邊停車地圖；場館未保證館內車位，請預留尋找停車位的時間。",
+      linkLabel: "查看 IEAT 周邊停車",
+      link: "https://www.ieatpe.org.tw/meeting/Traffic.aspx"
     }
   ]
 });
-

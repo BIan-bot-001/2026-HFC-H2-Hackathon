@@ -62,8 +62,11 @@
 
   const safeAsset = (value) => {
     if (!value) return "";
-    return /^assets\/images\/[A-Za-z0-9._/-]+$/.test(value) ? value : "";
+    const namedRootImage = /^[A-Za-z0-9\u3400-\u9FFF ()（）._-]+\.png$/u;
+    return /^assets\/images\/[A-Za-z0-9._/-]+$/.test(value) || namedRootImage.test(value) ? value : "";
   };
+
+  const safeWorkbook = (value) => /^[A-Za-z0-9\u3400-\u9FFF ()（）._-]+\.xlsx$/u.test(value || "") ? value : "";
 
   const pageById = (id) => pages.find((page) => page.id === id);
   const currentPage = document.body.dataset.page || "home";
@@ -196,7 +199,7 @@
           <div class="shell">
             <div class="section-heading reveal">
               <div><p class="eyebrow">EVENT INFORMATION</p><h2 id="dm-title">活動資訊</h2></div>
-              <p>活動 DM 將呈現完整資訊；正式圖片提供前，先保留活動資料與版位。</p>
+              <p>查看活動時間、地點與主題資訊。</p>
             </div>
             ${dm
               ? `<figure class="dm-frame reveal"><img src="${escapeHtml(dm)}" alt="${escapeHtml(config.event.name)} 活動 DM" loading="lazy"></figure>`
@@ -206,18 +209,85 @@
       </main>`;
   }
 
+  function agendaItemsMarkup(items) {
+    return items.map((item, index) => {
+      const details = [
+        item.unit ? `<div><dt>簡報單位</dt><dd>${escapeHtml(item.unit)}</dd></div>` : "",
+        item.speaker ? `<div><dt>簡報者</dt><dd>${escapeHtml(item.speaker)}</dd></div>` : "",
+        item.reviewers ? `<div><dt>講評人</dt><dd>${escapeHtml(item.reviewers)}</dd></div>` : ""
+      ].filter(Boolean).join("");
+      return `<article class="agenda-item${item.isBreak ? " is-break" : ""} reveal delay-${Math.min(index + 1, 3)}">
+        <time>${escapeHtml(item.time)}</time><div><span class="agenda-type">${escapeHtml(item.type)}</span><h2>${escapeHtml(item.title)}</h2>${details ? `<dl class="agenda-details">${details}</dl>` : item.detail ? `<p>${escapeHtml(item.detail)}</p>` : ""}</div>
+      </article>`;
+    }).join("");
+  }
+
   function renderAgenda() {
+    const fallbackAgenda = config.agenda.map((item) => ({ ...item, unit: "", speaker: "", reviewers: "", isBreak: false }));
     return `<main id="main-content">
       ${pageHero("AGENDA", "黑客松議程", "掌握活動流程與每個階段的時間安排。")}
       <section class="section"><div class="shell content-layout">
-        <aside class="info-card reveal"><p class="eyebrow">EVENT TIME</p><h2>${escapeHtml(config.event.date)}</h2><p class="big-time">${escapeHtml(config.event.time)}</p><p>${escapeHtml(config.event.venue)}</p><span class="status-pill">議程持續更新中</span></aside>
-        <div class="agenda-list" aria-label="活動議程">
-          ${config.agenda.map((item, index) => `<article class="agenda-item reveal delay-${Math.min(index + 1, 3)}">
-            <time>${escapeHtml(item.time)}</time><div><span class="agenda-type">${escapeHtml(item.type)}</span><h2>${escapeHtml(item.title)}</h2><p>${escapeHtml(item.detail)}</p></div>
-          </article>`).join("")}
+        <aside class="info-card reveal"><p class="eyebrow">EVENT TIME</p><h2>${escapeHtml(config.event.date)}</h2><p class="big-time">${escapeHtml(config.event.time)}</p><p>${escapeHtml(config.event.venue)}</p><span class="status-pill" id="agenda-status" role="status">正在讀取 Excel 議程</span></aside>
+        <div class="agenda-list" id="agenda-list" aria-label="活動議程" aria-busy="true">
+          ${agendaItemsMarkup(fallbackAgenda)}
         </div>
       </div></section>
     </main>`;
+  }
+
+  async function setupAgendaWorkbook() {
+    if (currentPage !== "agenda") return;
+    const list = document.querySelector("#agenda-list");
+    const status = document.querySelector("#agenda-status");
+    const workbookPath = safeWorkbook(config.assets.agendaWorkbook);
+    if (!list || !status || !workbookPath || !window.XLSX) {
+      if (list) list.setAttribute("aria-busy", "false");
+      if (status) status.textContent = "議程備援資料";
+      return;
+    }
+
+    try {
+      const requestUrl = new URL(workbookPath, window.location.href);
+      requestUrl.searchParams.set("refresh", String(Date.now()));
+      const response = await fetch(requestUrl, { cache: "no-store" });
+      if (!response.ok) throw new Error(`Excel HTTP ${response.status}`);
+      const workbook = window.XLSX.read(await response.arrayBuffer(), { type: "array" });
+      const source = config.agendaSource || {};
+      const sheet = workbook.Sheets[source.sheet || workbook.SheetNames[0]];
+      if (!sheet) throw new Error("找不到議程工作表");
+      const rows = window.XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: "" });
+      const firstIndex = Math.max(0, Number(source.firstRow || 3) - 1);
+      const lastIndex = Math.min(rows.length - 1, Number(source.lastRow || rows.length) - 1);
+      const agenda = rows.slice(firstIndex, lastIndex + 1).map((row) => {
+        const time = String(row[5] || "").trim();
+        const sequence = String(row[4] || "").trim();
+        const unit = String(row[6] || "").trim();
+        const speaker = String(row[7] || "").trim();
+        const topic = String(row[8] || "").trim();
+        const reviewers = [row[9], row[10]].map((value) => String(value || "").trim()).filter(Boolean).join("、");
+        const title = topic || unit;
+        return {
+          time,
+          title,
+          type: sequence && sequence !== "-" ? `第 ${sequence} 組` : "活動流程",
+          unit: topic ? unit : "",
+          speaker,
+          reviewers,
+          detail: "",
+          isBreak: title.includes("休息")
+        };
+      }).filter((item) => item.time && item.title);
+      if (!agenda.length) throw new Error("議程區段沒有可顯示的資料");
+      list.innerHTML = agendaItemsMarkup(agenda);
+      list.setAttribute("aria-busy", "false");
+      status.textContent = `已讀取 Excel・共 ${agenda.length} 筆`;
+      setupReveal(list);
+    } catch (error) {
+      console.error("議程 Excel 讀取失敗", error);
+      list.setAttribute("aria-busy", "false");
+      status.textContent = "Excel 讀取失敗・顯示備援資料";
+      status.classList.add("status-pending");
+    }
   }
 
   function renderFormPage(type) {
@@ -254,20 +324,21 @@
   function renderSeating() {
     const front = safeAsset(config.assets.seatingFront);
     const back = safeAsset(config.assets.seatingBack);
+    const defaultMode = front ? "front" : "back";
     return `<main id="main-content">
       ${pageHero("SEATING MAP", "座位圖", "依照觀看方向切換座位圖，快速找到正確位置。")}
       <section class="section"><div class="shell">
         <div class="seat-toolbar reveal">
           <div><p class="eyebrow">VIEW DIRECTION</p><h2>選擇座位圖方向</h2></div>
           <div class="segmented-control" role="tablist" aria-label="座位圖觀看方向">
-            <button id="seat-tab-front" type="button" role="tab" aria-selected="true" aria-controls="seat-front" data-seat="front">面對舞台</button>
-            <button id="seat-tab-back" type="button" role="tab" aria-selected="false" aria-controls="seat-back" data-seat="back" tabindex="-1">背對舞台</button>
+            <button id="seat-tab-front" type="button" role="tab" aria-selected="${defaultMode === "front"}" aria-controls="seat-front" data-seat="front"${defaultMode === "front" ? "" : ' tabindex="-1"'}>面對舞台</button>
+            <button id="seat-tab-back" type="button" role="tab" aria-selected="${defaultMode === "back"}" aria-controls="seat-back" data-seat="back"${defaultMode === "back" ? "" : ' tabindex="-1"'}>背對舞台</button>
           </div>
         </div>
         <div class="seat-stage reveal delay-1">
-          <div class="stage-label"><span>STAGE</span><strong>舞台方向</strong></div>
-          ${seatingPanel("front", front, "面對舞台座位圖", true)}
-          ${seatingPanel("back", back, "背對舞台座位圖", false)}
+          <div class="stage-label"><span>VIEW</span><strong id="seat-view-label">目前視角：${defaultMode === "front" ? "面對舞台" : "背對舞台"}</strong></div>
+          ${seatingPanel("front", front, "面對舞台座位圖", defaultMode === "front")}
+          ${seatingPanel("back", back, "背對舞台座位圖", defaultMode === "back")}
         </div>
         <p class="seat-note">提醒：請先確認你面對舞台或背對舞台，再查看對應座位圖。</p>
       </div></section>
@@ -299,7 +370,10 @@
           ${mapUrl ? `<a class="button button-primary" href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer">開啟地圖導航 ${icon("external")}</a>` : ""}
         </div>
         <div class="transport-list">
-          ${config.transport.map((item, index) => `<article class="transport-card reveal delay-${Math.min(index + 1, 3)}"><span>0${index + 1}</span><div><h2>${escapeHtml(item.title)}</h2><p>${escapeHtml(item.detail)}</p><small>${escapeHtml(item.note)}</small></div></article>`).join("")}
+          ${config.transport.map((item, index) => {
+            const itemUrl = safeHttpsUrl(item.link);
+            return `<article class="transport-card reveal delay-${Math.min(index + 1, 3)}"><span>0${index + 1}</span><div><h2>${escapeHtml(item.title)}</h2><p>${escapeHtml(item.detail)}</p><small>${escapeHtml(item.note)}</small>${itemUrl ? `<a class="text-link" href="${escapeHtml(itemUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.linkLabel || "查看詳情")} ${icon("external")}</a>` : ""}</div></article>`;
+          }).join("")}
         </div>
       </div></section>
     </main>`;
@@ -331,6 +405,10 @@
         const panel = document.querySelector(`#seat-${item.dataset.seat}`);
         panel.hidden = !selected;
         panel.classList.toggle("is-active", selected);
+        if (selected) {
+          const viewLabel = document.querySelector("#seat-view-label");
+          if (viewLabel) viewLabel.textContent = `目前視角：${item.dataset.seat === "front" ? "面對舞台" : "背對舞台"}`;
+        }
       });
     };
     tabs.forEach((tab, index) => {
@@ -349,8 +427,8 @@
     });
   }
 
-  function setupReveal() {
-    const items = document.querySelectorAll(".reveal");
+  function setupReveal(root = document) {
+    const items = root.querySelectorAll(".reveal");
     if (!items.length) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       items.forEach((item) => item.classList.add("is-visible"));
@@ -488,4 +566,5 @@
   setupSeatingTabs();
   setupReveal();
   setupSectionNavigation();
+  setupAgendaWorkbook();
 })();
