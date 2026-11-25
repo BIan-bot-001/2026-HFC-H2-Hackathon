@@ -88,6 +88,8 @@ assets: {
 
 第 35 列以後的備註與草稿不會公開顯示。如果日後正式議程超過第 20 列，請同步修改 `assets/data.js` 中的 `agendaSource.lastRow`。網站仍保留 `agenda` 備援清單，僅在 Excel 無法讀取時顯示。
 
+請注意：直接雙擊 `agenda.html` 時，瀏覽器不允許網頁自動讀取電腦上的相鄰 Excel，因此會顯示上次與 Excel 同步的完整備援議程。GitHub Pages 與本機 HTTP 預覽會優先即時讀取 Excel。若要在上線前確認最新 Excel，請用 README 的本機 HTTP 預覽方式，或請 Codex 更新同步備援資料。
+
 ## 更新後檢查
 
 1. 開啟七個頁面，確認沒有破圖或待更新文字。
