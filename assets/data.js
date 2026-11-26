@@ -35,7 +35,7 @@ window.HACKATHON_CONFIG = Object.freeze({
     { time: "13:54-14:06", title: "不動產鑑價自動化與智能算稅估值", type: "第 3 組", unit: "信用審查", speaker: "蔡佩芸", reviewers: "Steve、張正偉" },
     { time: "14:06-14:18", title: "車輛分期試算平台", type: "第 4 組", unit: "企劃", speaker: "莊姿婷", reviewers: "Steve、陳清龍" },
     { time: "14:18-14:38", title: "中場休息", type: "活動流程", isBreak: true },
-    { time: "14:38-14:50", title: "智慧管理升級，決策一站到位", type: "第 5 組", unit: "管理部", speaker: "廖本智、汪欣潔", reviewers: "Steve、陳煥文" },
+    { time: "14:38-14:50", title: "管理部掌上通", type: "第 5 組", unit: "管理部", speaker: "廖本智、汪欣潔", reviewers: "Steve、陳煥文" },
     { time: "14:50-15:02", title: "售電營運流程優化暨出單自動化", type: "第 6 組", unit: "潤電", speaker: "黃建璋", reviewers: "Steve、陳仕騏" },
     { time: "15:02-15:14", title: "金流自駕-收款智能化｜從自動銷帳到資金預判", type: "第 7 組", unit: "資金部", speaker: "劉靖嫻", reviewers: "Steve、彭俊忠" },
     { time: "15:14-15:26", title: "企業風險智能守衛系統", type: "第 8 組", unit: "風控作改", speaker: "陸依琦", reviewers: "Steve、邢合榮" },
@@ -63,7 +63,7 @@ window.HACKATHON_CONFIG = Object.freeze({
       detail: "導航至台北市松江路 350 號",
       note: "提供IEAT 官網周邊停車資訊，請預留尋找停車位的時間",
       linkLabel: "查看 IEAT 周邊停車",
-      link: "https://www.google.com.tw/maps/search/%E5%81%9C%E8%BB%8A%E5%A0%B4/@25.0616453,121.5307149,17z?hl=en&authuser=0"
+      link: "https://www.google.com.tw/maps/search/%E5%81%9C%E8%BB%8A%E5%A0%B4/@25.0616453,121.5307149,17z?hl=zh-TW&authuser=0&entry=ttu&g_ep=EgoyMDI2MTEyMy4wIKXMDSoASAFQAw%3D%3D"
     }
   ]
 });

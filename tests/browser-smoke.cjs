@@ -54,6 +54,7 @@ function assert(condition, message) {
           await page.waitForFunction(() => document.querySelector("#agenda-list")?.getAttribute("aria-busy") === "false");
           assert(await page.locator(".agenda-item").count() === 18, `${viewport.name}: Excel agenda did not render 18 rows`);
           assert(await page.locator("#agenda-status").count() === 0, `${viewport.name}: agenda status should not be rendered`);
+          assert(await page.getByRole("heading", { name: "管理部掌上通", exact: true }).count() === 1, `${viewport.name}: updated group 5 agenda title is incorrect`);
           assert(await page.getByRole("heading", { name: "和運國際AI成果分享 - 方秋生", exact: true }).count() === 1, `${viewport.name}: updated agenda title is incorrect`);
         }
       }
@@ -109,7 +110,7 @@ function assert(condition, message) {
       await page.goto(`${baseUrl}/transport.html`, { waitUntil: "domcontentloaded" });
       const parkingCard = page.locator(".transport-card").last();
       assert((await parkingCard.locator("small").textContent() || "").trim() === "提供IEAT 官網周邊停車資訊，請預留尋找停車位的時間", `${viewport.name}: parking guidance is incorrect`);
-      assert((await parkingCard.locator("a").getAttribute("href")) === "https://www.google.com.tw/maps/search/%E5%81%9C%E8%BB%8A%E5%A0%B4/@25.0616453,121.5307149,17z?hl=en&authuser=0", `${viewport.name}: parking map link is incorrect`);
+      assert((await parkingCard.locator("a").getAttribute("href")) === "https://www.google.com.tw/maps/search/%E5%81%9C%E8%BB%8A%E5%A0%B4/@25.0616453,121.5307149,17z?hl=zh-TW&authuser=0&entry=ttu&g_ep=EgoyMDI2MTEyMy4wIKXMDSoASAFQAw%3D%3D", `${viewport.name}: parking map link is incorrect`);
 
       await page.goto(`${baseUrl}/index.html`, { waitUntil: "domcontentloaded" });
       const snapTarget = await page.locator("#event-guide").evaluate((element) => element.getBoundingClientRect().top + window.scrollY - document.querySelector(".site-header").offsetHeight);
@@ -146,6 +147,7 @@ function assert(condition, message) {
     const filePage = await fileContext.newPage();
     await filePage.goto(pathToFileURL(path.join(__dirname, "..", "agenda.html")).href, { waitUntil: "domcontentloaded" });
     assert(await filePage.locator(".agenda-item").count() === 18, "file preview: synchronized agenda fallback did not render 18 rows");
+    assert(await filePage.getByRole("heading", { name: "管理部掌上通", exact: true }).count() === 1, "file preview: updated group 5 fallback is incorrect");
     assert(await filePage.locator("#agenda-status").count() === 0, "file preview: agenda status should not be rendered");
     await fileContext.close();
 

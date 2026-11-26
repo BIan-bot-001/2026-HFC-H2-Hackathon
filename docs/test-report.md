@@ -2,7 +2,7 @@
 
 - 測試日期：2026/11/26
 - 測試環境：Windows、Microsoft Edge（headless）、本機 HTTP 伺服器
-- 測試基準 revision：`5dd279c` 加本次待提交變更
+- 測試基準 revision：`51192c5` 加本次待提交變更
 - 受測資料：新版 JPG 活動 DM、Excel 議程、兩種方向座位圖、Forms 與 Teams URL、Google Maps 周邊停車資訊
 
 ## 結果
@@ -14,7 +14,7 @@
 | 公開輸出掃描 | REVIEWED | 第一方內容 PASS；SheetJS 內建密碼保護函式造成一筆已人工確認的誤報；不等於完整安全稽核 |
 | 本地 HTML 連結 | PASS | 七頁、404 與內部頁面連結存在 |
 | 瀏覽器頁面載入 | PASS | 8 頁 × 375／768／1440px，HTTP 與 console 無錯誤 |
-| Excel 議程讀取 | PASS | 「時間表」第 3–20 列共 18 筆正確顯示；「和運國際AI成果分享 - 方秋生」已同步至 Excel 與備援資料 |
+| Excel 議程讀取 | PASS | 「時間表」第 3–20 列共 18 筆正確顯示；「管理部掌上通」及「和運國際AI成果分享 - 方秋生」已同步至 Excel 與備援資料 |
 | Excel 直接開檔備援 | PASS | `file://` 模式不發送受限制的 Excel 請求，改為顯示與 Excel 同步的 18 筆完整議程 |
 | Excel 讀取依賴 | PASS | SheetJS CE 0.20.3 固定於專案內，無執行時 CDN 依賴；授權檔已保留 |
 | 響應式與水平溢位 | PASS | 三種 viewport 均無水平捲動 |
@@ -33,7 +33,7 @@
 | 減少動態偏好 | PASS | `prefers-reduced-motion: reduce` 下內容保持可見 |
 | 圖片載入 | PASS | Logo、首頁背景、新版 EDM、兩種方向座位圖與 favicon 無破圖 |
 | 目視檢查 | PASS | 首頁、議程、座位圖與交通頁桌面／手機截圖已人工檢查 |
-| 交通資訊 | PASS | 行天宮站 4 號出口、100 公尺、步行約 2 分鐘、指定停車說明與 Google Maps 周邊停車連結已顯示 |
+| 交通資訊 | PASS | 行天宮站 4 號出口、100 公尺、步行約 2 分鐘、指定停車說明與繁體中文 Google Maps 周邊停車連結已顯示 |
 | Forms 正式 iframe／登入 | NOT_RUN | URL 已置入；公司帳號登入與實際送出需由使用者驗收 |
 | Teams 正式連結／登入 | NOT_RUN | URL 已置入；公司帳號進入會議需由使用者驗收 |
 | 面對舞台座位圖 | PASS | 素材已載入並設為預設視角，可切換至背對舞台版本 |
