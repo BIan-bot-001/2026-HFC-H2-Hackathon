@@ -53,7 +53,8 @@ function assert(condition, message) {
         if (file === "agenda.html") {
           await page.waitForFunction(() => document.querySelector("#agenda-list")?.getAttribute("aria-busy") === "false");
           assert(await page.locator(".agenda-item").count() === 18, `${viewport.name}: Excel agenda did not render 18 rows`);
-          assert((await page.locator("#agenda-status").textContent() || "").includes("已讀取 Excel"), `${viewport.name}: Excel agenda status is incorrect`);
+          assert(await page.locator("#agenda-status").count() === 0, `${viewport.name}: agenda status should not be rendered`);
+          assert(await page.getByRole("heading", { name: "和運國際AI成果分享 - 方秋生", exact: true }).count() === 1, `${viewport.name}: updated agenda title is incorrect`);
         }
       }
 
@@ -61,6 +62,7 @@ function assert(condition, message) {
       assert(await page.locator(".site-header").evaluate((element) => getComputedStyle(element).position) === "fixed", `${viewport.name}: header is not fixed`);
       assert(await page.locator(".event-meta dd").first().evaluate((element) => parseFloat(getComputedStyle(element).fontSize)) >= 28, `${viewport.name}: event details are smaller than 28px`);
       assert(await page.locator(".dm-frame img").count() === 1, `${viewport.name}: event EDM is missing`);
+      assert((await page.locator(".dm-frame img").getAttribute("src")) === "2026 H2黑客松EDM.jpg", `${viewport.name}: current event EDM is incorrect`);
       assert((await page.locator("#event-dm h2").textContent() || "").trim() === "活動 DM", `${viewport.name}: event DM heading is incorrect`);
       assert(await page.locator("#event-dm .section-heading > p").count() === 0, `${viewport.name}: event DM explanatory copy should be removed`);
       if (viewport.name === "mobile") {
@@ -96,12 +98,18 @@ function assert(condition, message) {
       await page.goto(`${baseUrl}/seating.html`, { waitUntil: "domcontentloaded" });
       const frontTab = page.locator("#seat-tab-front");
       const backTab = page.locator("#seat-tab-back");
-      assert(await backTab.getAttribute("aria-selected") === "true", `${viewport.name}: provided back seating view is not the default`);
+      assert(await frontTab.getAttribute("aria-selected") === "true", `${viewport.name}: front seating view is not the default`);
+      assert(await page.locator("#seat-front img").count() === 1, `${viewport.name}: front seating image is missing`);
       assert(await page.locator("#seat-back img").count() === 1, `${viewport.name}: back seating image is missing`);
       await frontTab.focus();
       await frontTab.press("ArrowRight");
       assert(await backTab.getAttribute("aria-selected") === "true", `${viewport.name}: seating keyboard switch failed`);
       assert(await page.locator("#seat-back").isVisible(), `${viewport.name}: back seating panel not visible`);
+
+      await page.goto(`${baseUrl}/transport.html`, { waitUntil: "domcontentloaded" });
+      const parkingCard = page.locator(".transport-card").last();
+      assert((await parkingCard.locator("small").textContent() || "").trim() === "提供IEAT 官網周邊停車資訊，請預留尋找停車位的時間", `${viewport.name}: parking guidance is incorrect`);
+      assert((await parkingCard.locator("a").getAttribute("href")) === "https://www.google.com.tw/maps/search/%E5%81%9C%E8%BB%8A%E5%A0%B4/@25.0616453,121.5307149,17z?hl=en&authuser=0", `${viewport.name}: parking map link is incorrect`);
 
       await page.goto(`${baseUrl}/index.html`, { waitUntil: "domcontentloaded" });
       const snapTarget = await page.locator("#event-guide").evaluate((element) => element.getBoundingClientRect().top + window.scrollY - document.querySelector(".site-header").offsetHeight);
@@ -118,6 +126,7 @@ function assert(condition, message) {
         await page.goto(`${baseUrl}/agenda.html`, { waitUntil: "domcontentloaded" });
         await page.waitForFunction(() => document.querySelector("#agenda-list")?.getAttribute("aria-busy") === "false");
         await page.screenshot({ path: path.join(outputDir, `agenda-${viewport.name}.png`), fullPage: true });
+        await page.locator(".agenda-layout").screenshot({ path: path.join(outputDir, `agenda-content-${viewport.name}.png`) });
         await page.goto(`${baseUrl}/seating.html`, { waitUntil: "domcontentloaded" });
         await page.screenshot({ path: path.join(outputDir, `seating-${viewport.name}.png`), fullPage: true });
         await page.goto(`${baseUrl}/transport.html`, { waitUntil: "domcontentloaded" });
@@ -137,7 +146,7 @@ function assert(condition, message) {
     const filePage = await fileContext.newPage();
     await filePage.goto(pathToFileURL(path.join(__dirname, "..", "agenda.html")).href, { waitUntil: "domcontentloaded" });
     assert(await filePage.locator(".agenda-item").count() === 18, "file preview: synchronized agenda fallback did not render 18 rows");
-    assert((await filePage.locator("#agenda-status").textContent() || "").includes("本機直接預覽"), "file preview: local preview status is incorrect");
+    assert(await filePage.locator("#agenda-status").count() === 0, "file preview: agenda status should not be rendered");
     await fileContext.close();
 
     assert(errors.length === 0, errors.join("\n"));

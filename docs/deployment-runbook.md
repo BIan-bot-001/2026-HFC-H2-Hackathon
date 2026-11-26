@@ -7,6 +7,12 @@
 - G4 核准必須明確指定 repository、commit SHA、環境 `PROD` 與發布動作。
 - 再次確認一般 GitHub Pages 是公開網站；`noindex` 與 `robots.txt` 不是存取控制。
 
+## 代為上架所需最小權限
+
+- 若 repository 屬於組織：提供該單一 repository 的 **Maintain** 權限即可設定 GitHub Pages；不需要組織擁有者或全域管理員權限。
+- 若只需要代為推送程式碼：可使用只限定該 repository、`Contents: Read and write` 的 fine-grained personal access token，並設定短效期限；Pages 發布來源仍由具 Maintain／Admin 權限者設定。
+- 不要在對話中貼上密碼或長效 token。優先使用 GitHub CLI 的瀏覽器登入，工作完成後撤銷授權或移除協作者。
+
 ## 建議部署方式
 
 本專案不需要建置流程。將 `main` 分支根目錄設為 GitHub Pages 發布來源：
@@ -50,4 +56,3 @@
 - 外部服務負責人：Microsoft Forms／Teams 建立者。
 - 事故通報窗口：待使用者指定。
 - 正式秘密：本專案不應包含秘密；若未來出現 token／密碼，必須移出前端並立即撤銷。
-

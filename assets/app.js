@@ -62,7 +62,7 @@
 
   const safeAsset = (value) => {
     if (!value) return "";
-    const namedRootImage = /^[A-Za-z0-9\u3400-\u9FFF ()（）._-]+\.png$/u;
+    const namedRootImage = /^[A-Za-z0-9\u3400-\u9FFF ()（）._-]+\.(?:png|jpe?g)$/iu;
     return /^assets\/images\/[A-Za-z0-9._/-]+$/.test(value) || namedRootImage.test(value) ? value : "";
   };
 
@@ -162,8 +162,8 @@
           <div class="shell home-hero-grid">
             <div class="home-copy reveal">
               <p class="eyebrow">2026 H2 HACKATHON</p>
-              <h1>一起把想法，<span>變成下一步。</span></h1>
-              <p class="hero-lead">${escapeHtml(config.event.name)}，讓我們攜手串聯數據、看見成果、探索落地解方的無限可能。</p>
+              <h1>一起把想法<span>變成下一步</span></h1>
+              <p class="hero-lead">${escapeHtml(config.event.name)}，讓我們攜手串聯數據、看見成果、探索落地解方的無限可能</p>
               <dl class="event-meta">
                 <div><dt>日期</dt><dd>${escapeHtml(config.event.date)}</dd></div>
                 <div><dt>時間</dt><dd>${escapeHtml(config.event.time)}</dd></div>
@@ -179,7 +179,7 @@
           <div class="shell">
             <div class="section-heading reveal">
               <div><p class="eyebrow">EVENT GUIDE</p><h2 id="guide-title">活動導覽</h2></div>
-              <p>從這裡快速前往活動當天最常使用的資訊與服務。</p>
+              <p>快速前往所需資訊與服務</p>
             </div>
             <div class="guide-grid">
               ${navigationCards.map((card, index) => {
@@ -224,9 +224,9 @@
   function renderAgenda() {
     const fallbackAgenda = config.agenda.map((item) => ({ unit: "", speaker: "", reviewers: "", isBreak: false, ...item }));
     return `<main id="main-content">
-      ${pageHero("AGENDA", "黑客松議程", "掌握活動流程與每個階段的時間安排。")}
-      <section class="section"><div class="shell content-layout">
-        <aside class="info-card reveal"><p class="eyebrow">EVENT TIME</p><h2>${escapeHtml(config.event.date)}</h2><p class="big-time">${escapeHtml(config.event.time)}</p><p>${escapeHtml(config.event.venue)}</p><span class="status-pill" id="agenda-status" role="status">正在讀取 Excel 議程</span></aside>
+      ${pageHero("AGENDA", "黑客松議程", "掌握每階段的時間安排")}
+      <section class="section"><div class="shell content-layout agenda-layout">
+        <aside class="info-card agenda-summary reveal"><p class="eyebrow">EVENT TIME</p><h2>${escapeHtml(config.event.date)}</h2><p class="big-time">${escapeHtml(config.event.time)}</p><p>${escapeHtml(config.event.venue)}</p></aside>
         <div class="agenda-list" id="agenda-list" aria-label="活動議程" aria-busy="true">
           ${agendaItemsMarkup(fallbackAgenda)}
         </div>
@@ -237,17 +237,14 @@
   async function setupAgendaWorkbook() {
     if (currentPage !== "agenda") return;
     const list = document.querySelector("#agenda-list");
-    const status = document.querySelector("#agenda-status");
     const workbookPath = safeWorkbook(config.assets.agendaWorkbook);
-    if (!list || !status || !workbookPath || !window.XLSX) {
+    if (!list || !workbookPath || !window.XLSX) {
       if (list) list.setAttribute("aria-busy", "false");
-      if (status) status.textContent = "議程備援資料";
       return;
     }
 
     if (window.location.protocol === "file:") {
       list.setAttribute("aria-busy", "false");
-      status.textContent = `本機直接預覽・顯示 Excel 同步資料・共 ${config.agenda.length} 筆`;
       return;
     }
 
@@ -285,13 +282,10 @@
       if (!agenda.length) throw new Error("議程區段沒有可顯示的資料");
       list.innerHTML = agendaItemsMarkup(agenda);
       list.setAttribute("aria-busy", "false");
-      status.textContent = `已讀取 Excel・共 ${agenda.length} 筆`;
       setupReveal(list);
     } catch (error) {
       console.warn("議程 Excel 無法即時讀取，已改用同步備援資料。", error);
       list.setAttribute("aria-busy", "false");
-      status.textContent = `Excel 即時讀取不可用・已顯示同步資料・共 ${config.agenda.length} 筆`;
-      status.classList.add("status-pending");
     }
   }
 
@@ -299,14 +293,14 @@
     const isCheckin = type === "checkin";
     const title = isCheckin ? "線上報到" : "填寫需求回饋";
     const eyebrow = isCheckin ? "CHECK IN" : "FEEDBACK";
-    const description = isCheckin ? "使用 Microsoft Forms 完成活動報到。" : "透過 Microsoft Forms 留下需求與活動回饋。";
+    const description = isCheckin ? "參與盛會，也別忘了留下紀錄" : "參與黑客松後，撥出3-5分鐘回饋未來的AI需求吧！";
     const url = safeHttpsUrl(isCheckin ? config.links.checkinForm : config.links.feedbackForm);
     return `<main id="main-content">
       ${pageHero(eyebrow, title, description)}
       <section class="section"><div class="shell form-layout">
         <div class="form-guidance reveal">
           <p class="eyebrow">MICROSOFT FORMS</p><h2>${isCheckin ? "開始報到" : "告訴我們你的需求"}</h2>
-          <p>若內嵌表單因公司登入、瀏覽器或網路政策無法顯示，請使用另開視窗按鈕。</p>
+          <p>若內嵌表單無法顯示，請點選按鈕前往</p>
           ${url ? `<a class="button button-secondary" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">另開表單 ${icon("external")}</a>` : `<span class="status-pill status-pending">表單連結待提供</span>`}
         </div>
         <div class="form-frame reveal delay-1">
@@ -331,7 +325,7 @@
     const back = safeAsset(config.assets.seatingBack);
     const defaultMode = front ? "front" : "back";
     return `<main id="main-content">
-      ${pageHero("SEATING MAP", "座位圖", "依照觀看方向切換座位圖，快速找到正確位置。")}
+      ${pageHero("SEATING MAP", "座位圖", "切換方向，快速找到座位")}
       <section class="section"><div class="shell">
         <div class="seat-toolbar reveal">
           <div><p class="eyebrow">VIEW DIRECTION</p><h2>選擇座位圖方向</h2></div>
@@ -353,10 +347,10 @@
   function renderLive() {
     const url = safeHttpsUrl(config.links.teamsLive);
     return `<main id="main-content">
-      ${pageHero("LIVE STREAM", "直播連結", "透過 Microsoft Teams 進入活動直播。")}
+      ${pageHero("LIVE STREAM", "直播連結", "點擊連結進入Teams直播")}
       <section class="section"><div class="shell live-card reveal">
         <div class="live-visual" aria-hidden="true">${icon("video")}<i></i></div>
-        <div><p class="eyebrow">MICROSOFT TEAMS</p><h2>準備進入活動直播</h2><p>按下按鈕後將在新視窗開啟 Teams。實際存取權限與登入方式依公司 Microsoft 帳號設定為準。</p>
+        <div><p class="eyebrow">MICROSOFT TEAMS</p><h2>準備進入活動直播</h2><p>按下按鈕後將在新視窗開啟 Teams</p>
           ${url
             ? `<a class="button button-primary" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">開啟 Teams 直播 ${icon("external")}</a>`
             : `<button class="button button-primary" type="button" disabled>直播連結待提供</button>`}
@@ -368,7 +362,7 @@
   function renderTransport() {
     const mapUrl = safeHttpsUrl(config.links.map);
     return `<main id="main-content">
-      ${pageHero("TRANSPORTATION", "交通資訊", "查看活動地址與前往 IEAT 一樓會議室的導航資訊。")}
+      ${pageHero("TRANSPORTATION", "交通資訊", "查看活動地址交通資訊")}
       <section class="section"><div class="shell transport-layout">
         <div class="venue-card reveal">
           <div class="venue-pin">${icon("pin")}</div><p class="eyebrow">VENUE</p><h2>${escapeHtml(config.event.venue)}</h2><p class="address">${escapeHtml(config.event.address)}</p>

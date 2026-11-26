@@ -57,7 +57,7 @@ Microsoft Forms 頁面會同時提供內嵌表單與另開視窗按鈕。正式�
 
 ## 更新圖片
 
-目前最簡單的更新方式，是保留檔名並直接替換專案根目錄的 `2026 H2黑客松EDM.png` 或 `座位圖-背對舞台.png`，再將新檔案提交與推送到 GitHub。
+目前最簡單的更新方式，是保留檔名並直接替換專案根目錄的 `2026 H2黑客松EDM.jpg`、`座位圖-面對舞台.png` 或 `座位圖-背對舞台.png`，再將新檔案提交與推送到 GitHub。
 
 如果要新增不同檔名的圖片：
 
@@ -69,8 +69,8 @@ Microsoft Forms 頁面會同時提供內嵌表單與另開視窗按鈕。正式�
 assets: {
   logo: "assets/images/hotai-finance-logo.png",
   dm: "assets/images/event-dm.png",
-  seatingFront: "assets/images/seating-front.png",
-  seatingBack: "assets/images/seating-back.png"
+  seatingFront: "座位圖-面對舞台.png",
+  seatingBack: "座位圖-背對舞台.png"
 }
 ```
 

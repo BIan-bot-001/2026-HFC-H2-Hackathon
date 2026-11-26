@@ -6,13 +6,13 @@ window.HACKATHON_CONFIG = Object.freeze({
     venue: "IEAT 一樓會議室",
     address: "台北市松江路350號",
     organizers: ["資訊部", "人發室"],
-    updatedAt: "2026/11/25"
+    updatedAt: "2026/11/26"
   },
   assets: {
     logo: "assets/images/hotai-finance-logo.png",
-    dm: "2026 H2黑客松EDM.png",
+    dm: "2026 H2黑客松EDM.jpg",
     agendaWorkbook: "黑客松議程.xlsx",
-    seatingFront: "",
+    seatingFront: "座位圖-面對舞台.png",
     seatingBack: "座位圖-背對舞台.png"
   },
   links: {
@@ -44,7 +44,7 @@ window.HACKATHON_CONFIG = Object.freeze({
     { time: "15:58-16:10", title: "家事法院死亡事件公告自動查詢與應用效能", type: "第 10 組", unit: "債權管理", speaker: "陳吉宏", reviewers: "Steve、蔡東原" },
     { time: "16:10-16:22", title: "讓公文自己跑，別讓同仁一直跑", type: "第 11 組", unit: "經企公關部", speaker: "劉于慈", reviewers: "Steve、林瑜文" },
     { time: "16:22-16:34", title: "公文雷達DocRadar", type: "第 12 組", unit: "作業服務部", speaker: "施佳莉、胡藏轅", reviewers: "Steve、李秋慧" },
-    { time: "16:34-16:44", title: "和運國際AI成果分享", type: "活動流程" },
+    { time: "16:34-16:44", title: "和運國際AI成果分享 - 方秋生", type: "活動流程" },
     { time: "16:44-17:00", title: "董事長致詞+頒獎", type: "活動流程" }
   ],
   transport: [
@@ -61,9 +61,9 @@ window.HACKATHON_CONFIG = Object.freeze({
     {
       title: "開車前往",
       detail: "導航至台北市松江路 350 號",
-      note: "IEAT 官網提供周邊停車地圖；場館未保證館內車位，請預留尋找停車位的時間。",
+      note: "提供IEAT 官網周邊停車資訊，請預留尋找停車位的時間",
       linkLabel: "查看 IEAT 周邊停車",
-      link: "https://www.ieatpe.org.tw/meeting/Traffic.aspx"
+      link: "https://www.google.com.tw/maps/search/%E5%81%9C%E8%BB%8A%E5%A0%B4/@25.0616453,121.5307149,17z?hl=en&authuser=0"
     }
   ]
 });

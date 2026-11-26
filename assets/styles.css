@@ -135,6 +135,8 @@ p { text-wrap: pretty; }
 .content-layout { display: grid; grid-template-columns: minmax(250px, .65fr) minmax(0, 1.6fr); align-items: start; gap: 34px; }
 .info-card { position: sticky; top: calc(var(--header-height) + 25px); padding: 30px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: #fff; box-shadow: var(--shadow-sm); }
 .info-card h2 { margin-bottom: 8px; font-size: 30px; }
+.agenda-layout { grid-template-columns: minmax(220px, .5fr) minmax(0, 1.75fr); gap: 28px; }
+.agenda-summary { padding: 26px; }
 .big-time { margin-bottom: 6px; color: var(--color-primary); font-size: 26px; font-weight: 900; }
 .status-pill { display: inline-flex; align-items: center; min-height: 32px; margin-top: 16px; padding: 5px 11px; border-radius: 99px; background: var(--color-primary-soft); color: var(--color-primary-hover); font-size: 12px; font-weight: 850; }
 .status-pending { background: var(--color-accent-soft); color: #6d4a06; }
