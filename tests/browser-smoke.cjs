@@ -112,6 +112,9 @@ function assert(condition, message) {
       assert((await parkingCard.locator("small").textContent() || "").trim() === "提供IEAT 官網周邊停車資訊，請預留尋找停車位的時間", `${viewport.name}: parking guidance is incorrect`);
       assert((await parkingCard.locator("a").getAttribute("href")) === "https://www.google.com.tw/maps/search/%E5%81%9C%E8%BB%8A%E5%A0%B4/@25.0616453,121.5307149,17z?hl=zh-TW&authuser=0&entry=ttu&g_ep=EgoyMDI2MTEyMy4wIKXMDSoASAFQAw%3D%3D", `${viewport.name}: parking map link is incorrect`);
 
+      await page.goto(`${baseUrl}/feedback.html`, { waitUntil: "domcontentloaded" });
+      assert(await page.getByRole("heading", { name: "請讓我們了解你在AI的使用情況與需求", exact: true }).count() === 1, `${viewport.name}: feedback guidance heading is incorrect`);
+
       await page.goto(`${baseUrl}/index.html`, { waitUntil: "domcontentloaded" });
       const snapTarget = await page.locator("#event-guide").evaluate((element) => element.getBoundingClientRect().top + window.scrollY - document.querySelector(".site-header").offsetHeight);
       const heroHeight = await page.locator("#home-intro").evaluate((element) => element.offsetHeight);

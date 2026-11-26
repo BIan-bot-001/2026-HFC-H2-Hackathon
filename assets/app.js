@@ -299,7 +299,7 @@
       ${pageHero(eyebrow, title, description)}
       <section class="section"><div class="shell form-layout">
         <div class="form-guidance reveal">
-          <p class="eyebrow">MICROSOFT FORMS</p><h2>${isCheckin ? "開始報到" : "告訴我們你的需求"}</h2>
+          <p class="eyebrow">MICROSOFT FORMS</p><h2>${isCheckin ? "開始報到" : "請讓我們了解你在AI的使用情況與需求"}</h2>
           <p>若內嵌表單無法顯示，請點選按鈕前往</p>
           ${url ? `<a class="button button-secondary" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">另開表單 ${icon("external")}</a>` : `<span class="status-pill status-pending">表單連結待提供</span>`}
         </div>
