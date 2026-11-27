@@ -38,7 +38,7 @@
 | Forms 正式 iframe／登入 | NOT_RUN | URL 已置入；公司帳號登入與實際送出需由使用者驗收 |
 | Teams 正式連結／登入 | NOT_RUN | URL 已置入；公司帳號進入會議需由使用者驗收 |
 | 面對舞台座位圖 | PASS | 素材已載入並設為預設視角，可切換至背對舞台版本 |
-| GitHub Pages 正式部署 smoke test | PENDING | 已取得本次議程 revision 推送至指定 repository `main` 的 G4 核准；推送完成後執行 |
+| GitHub Pages 正式部署 smoke test | PASS | commit `6c4e65a` 已發布；線上議程頁、`assets/data.js` 與最新版 Excel 均回應 200，19 筆議程正確載入 |
 | 完整人工無障礙稽核 | NOT_RUN | 已驗證關鍵自動化項目，未宣稱完整 WCAG 認證 |
 
 公開輸出掃描補充：全專案掃描會在第三方 `xlsx.mini.min.js` 的工作表密碼保護函式名稱命中 `PASSWORD_ASSIGNMENT`。人工檢視確認這是 SheetJS 原始程式碼，不是密碼或金鑰。排除未修改的第三方套件後，第一方內容掃描 PASS。
@@ -55,6 +55,7 @@
 8. Microsoft Forms iframe 改以本站 DOM 完成作為測試條件，避免外部服務持續連線造成錯誤的 `networkidle` 逾時。
 9. 移除議程資訊卡的 Excel／本機預覽狀態列，縮窄資訊卡並保留完整議程讀取與備援機制。
 10. 根目錄圖片白名單新增 JPG／JPEG，讓新版活動 DM 可安全載入。
+11. 各頁明確指定相對路徑 `favicon.ico`，避免 GitHub 專案型 Pages 誤向網域根目錄要求圖示而產生 404。
 
 
 ## G3／G4 狀態
