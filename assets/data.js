@@ -29,7 +29,7 @@ window.HACKATHON_CONFIG = Object.freeze({
   },
   agenda: [
     { time: "13:00-13:05", title: "開場 & AI小組成果報告", type: "活動流程" },
-    { time: "13:05-13:15", title: "From AI to ROI - 和勁企業 李佳峯 執行副總", type: "活動流程" },
+    { time: "13:05-13:15", title: "From AI to ROI - 和潤興業 李佳峯 執行副總", type: "活動流程" },
     { time: "13:15-13:35", title: "AI專題分享 - Steve", type: "活動流程" },
     { time: "13:35-13:47", title: "不讓客戶等，不讓商機跑：24 小時 AI 中結報價助手", type: "第 1 組", unit: "和勁", speaker: "鄭喬丰", reviewers: "Steve、周家宏" },
     { time: "13:47-13:59", title: "消費通路審查風險自動化判別", type: "第 2 組", unit: "勁榮", speaker: "劉靜萍", reviewers: "Steve、陳志偉" },

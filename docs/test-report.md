@@ -2,7 +2,7 @@
 
 - 測試日期：2026/11/27
 - 測試環境：Windows、Microsoft Edge（headless）、本機 HTTP 伺服器
-- 測試基準 revision：`accda8b` 加本次議程待提交變更
+- 測試基準 revision：`a0e9797` 加本次公司名稱待提交變更
 - 受測資料：新版 JPG 活動 DM、Excel 議程、兩種方向座位圖、Forms 與 Teams URL、Google Maps 周邊停車資訊
 
 ## 結果
@@ -14,7 +14,7 @@
 | 公開輸出掃描 | REVIEWED | 第一方內容 PASS；SheetJS 內建密碼保護函式造成一筆已人工確認的誤報；不等於完整安全稽核 |
 | 本地 HTML 連結 | PASS | 七頁、404 與內部頁面連結存在 |
 | 瀏覽器頁面載入 | PASS | 8 頁 × 375／768／1440px，HTTP 與 console 無錯誤 |
-| Excel 議程讀取 | PASS | 「時間表」第 3–21 列共 19 筆正確顯示；新增「From AI to ROI - 和勁企業 李佳峯 執行副總」，其餘時間亦依 Excel 更新 |
+| Excel 議程讀取 | PASS | 「時間表」第 3–21 列共 19 筆正確顯示；「From AI to ROI」場次公司名稱已更新為「和潤興業」，其餘內容不變 |
 | Excel 直接開檔備援 | PASS | `file://` 模式不發送受限制的 Excel 請求，改為顯示與 Excel 同步的 19 筆完整議程 |
 | Excel 讀取依賴 | PASS | SheetJS CE 0.20.3 固定於專案內，無執行時 CDN 依賴；授權檔已保留 |
 | 響應式與水平溢位 | PASS | 三種 viewport 均無水平捲動 |

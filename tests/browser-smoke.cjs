@@ -55,7 +55,7 @@ function assert(condition, message) {
           assert(await page.locator(".agenda-item").count() === 19, `${viewport.name}: Excel agenda did not render 19 rows`);
           assert(await page.locator("#agenda-status").count() === 0, `${viewport.name}: agenda status should not be rendered`);
           assert(await page.getByRole("heading", { name: "管理部掌上通", exact: true }).count() === 1, `${viewport.name}: updated group 5 agenda title is incorrect`);
-          assert(await page.getByRole("heading", { name: "From AI to ROI - 和勁企業 李佳峯 執行副總", exact: true }).count() === 1, `${viewport.name}: new executive sharing agenda item is missing`);
+          assert(await page.getByRole("heading", { name: "From AI to ROI - 和潤興業 李佳峯 執行副總", exact: true }).count() === 1, `${viewport.name}: executive sharing company name is incorrect`);
           assert(await page.getByRole("heading", { name: "和運國際AI成果分享 - 方秋生", exact: true }).count() === 1, `${viewport.name}: updated agenda title is incorrect`);
         }
       }
@@ -151,7 +151,7 @@ function assert(condition, message) {
     const filePage = await fileContext.newPage();
     await filePage.goto(pathToFileURL(path.join(__dirname, "..", "agenda.html")).href, { waitUntil: "domcontentloaded" });
     assert(await filePage.locator(".agenda-item").count() === 19, "file preview: synchronized agenda fallback did not render 19 rows");
-    assert(await filePage.getByRole("heading", { name: "From AI to ROI - 和勁企業 李佳峯 執行副總", exact: true }).count() === 1, "file preview: new executive sharing fallback is missing");
+    assert(await filePage.getByRole("heading", { name: "From AI to ROI - 和潤興業 李佳峯 執行副總", exact: true }).count() === 1, "file preview: executive sharing company fallback is incorrect");
     assert(await filePage.getByRole("heading", { name: "管理部掌上通", exact: true }).count() === 1, "file preview: updated group 5 fallback is incorrect");
     assert(await filePage.locator("#agenda-status").count() === 0, "file preview: agenda status should not be rendered");
     await fileContext.close();
