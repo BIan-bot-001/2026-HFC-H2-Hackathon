@@ -21,7 +21,7 @@ python -m http.server 4173
 ## 內容更新
 
 - 活動文字與外部連結：`assets/data.js`
-- 議程：編輯專案根目錄的 `黑客松議程.xlsx`，保留「時間表」第 3–20 列與原欄位位置
+- 議程：編輯專案根目錄的 `黑客松議程.xlsx`，保留「時間表」第 3–21 列與原欄位位置
 - DM：直接替換專案根目錄的 `2026 H2黑客松EDM.jpg`
 - 面對／背對舞台座位圖：替換專案根目錄的同名圖片，或更新 `assets.seatingFront` 與 `assets.seatingBack`
 - 詳細步驟：`docs/content-update-guide.md`

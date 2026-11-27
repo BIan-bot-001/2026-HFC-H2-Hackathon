@@ -2,9 +2,9 @@
   "projectId": "hotai-finance-2026-h2-hackathon",
   "typeProfiles": ["TYPE-01", "TYPE-02"],
   "capabilities": ["CAP-01", "CAP-02", "CAP-03", "CAP-16"],
-  "environment": "DEV",
+  "environment": "PROD",
   "dataClassification": "PUBLIC",
   "protected": false,
   "authConfigured": false,
-  "approvedGates": ["G1", "G2"]
+  "approvedGates": ["G1", "G2", "G3", "G4"]
 }

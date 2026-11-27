@@ -6,7 +6,7 @@ window.HACKATHON_CONFIG = Object.freeze({
     venue: "IEAT 一樓會議室",
     address: "台北市松江路350號",
     organizers: ["資訊部", "人發室"],
-    updatedAt: "2026/11/26"
+    updatedAt: "2026/11/27"
   },
   assets: {
     logo: "assets/images/hotai-finance-logo.png",
@@ -25,27 +25,28 @@ window.HACKATHON_CONFIG = Object.freeze({
   agendaSource: {
     sheet: "時間表",
     firstRow: 3,
-    lastRow: 20
+    lastRow: 21
   },
   agenda: [
-    { time: "13:00-13:10", title: "開場 & AI小組成果報告", type: "活動流程" },
-    { time: "13:10-13:30", title: "AI專題分享 - Steve", type: "活動流程" },
-    { time: "13:30-13:42", title: "不讓客戶等，不讓商機跑：24 小時 AI 中結報價助手", type: "第 1 組", unit: "和勁", speaker: "鄭喬丰", reviewers: "Steve、周家宏" },
-    { time: "13:42-13:54", title: "消費通路審查風險自動化判別", type: "第 2 組", unit: "勁榮", speaker: "劉靜萍", reviewers: "Steve、陳志偉" },
-    { time: "13:54-14:06", title: "不動產鑑價自動化與智能算稅估值", type: "第 3 組", unit: "信用審查", speaker: "蔡佩芸", reviewers: "Steve、張正偉" },
-    { time: "14:06-14:18", title: "車輛分期試算平台", type: "第 4 組", unit: "企劃", speaker: "莊姿婷", reviewers: "Steve、陳清龍" },
-    { time: "14:18-14:38", title: "中場休息", type: "活動流程", isBreak: true },
-    { time: "14:38-14:50", title: "管理部掌上通", type: "第 5 組", unit: "管理部", speaker: "廖本智、汪欣潔", reviewers: "Steve、陳煥文" },
-    { time: "14:50-15:02", title: "售電營運流程優化暨出單自動化", type: "第 6 組", unit: "潤電", speaker: "黃建璋", reviewers: "Steve、陳仕騏" },
-    { time: "15:02-15:14", title: "金流自駕-收款智能化｜從自動銷帳到資金預判", type: "第 7 組", unit: "資金部", speaker: "劉靖嫻", reviewers: "Steve、彭俊忠" },
-    { time: "15:14-15:26", title: "企業風險智能守衛系統", type: "第 8 組", unit: "風控作改", speaker: "陸依琦", reviewers: "Steve、邢合榮" },
-    { time: "15:26-15:46", title: "中場休息", type: "活動流程", isBreak: true },
-    { time: "15:46-15:58", title: "新戶開發加速器｜新戶商機導航與開發成果管理平台", type: "第 9 組", unit: "興業", speaker: "吳旻燁", reviewers: "Steve、張偉鈞" },
-    { time: "15:58-16:10", title: "家事法院死亡事件公告自動查詢與應用效能", type: "第 10 組", unit: "債權管理", speaker: "陳吉宏", reviewers: "Steve、蔡東原" },
-    { time: "16:10-16:22", title: "讓公文自己跑，別讓同仁一直跑", type: "第 11 組", unit: "經企公關部", speaker: "劉于慈", reviewers: "Steve、林瑜文" },
-    { time: "16:22-16:34", title: "公文雷達DocRadar", type: "第 12 組", unit: "作業服務部", speaker: "施佳莉、胡藏轅", reviewers: "Steve、李秋慧" },
-    { time: "16:34-16:44", title: "和運國際AI成果分享 - 方秋生", type: "活動流程" },
-    { time: "16:44-17:00", title: "董事長致詞+頒獎", type: "活動流程" }
+    { time: "13:00-13:05", title: "開場 & AI小組成果報告", type: "活動流程" },
+    { time: "13:05-13:15", title: "From AI to ROI - 和勁企業 李佳峯 執行副總", type: "活動流程" },
+    { time: "13:15-13:35", title: "AI專題分享 - Steve", type: "活動流程" },
+    { time: "13:35-13:47", title: "不讓客戶等，不讓商機跑：24 小時 AI 中結報價助手", type: "第 1 組", unit: "和勁", speaker: "鄭喬丰", reviewers: "Steve、周家宏" },
+    { time: "13:47-13:59", title: "消費通路審查風險自動化判別", type: "第 2 組", unit: "勁榮", speaker: "劉靜萍", reviewers: "Steve、陳志偉" },
+    { time: "13:59-14:11", title: "不動產鑑價自動化與智能算稅估值", type: "第 3 組", unit: "信用審查", speaker: "蔡佩芸", reviewers: "Steve、張正偉" },
+    { time: "14:11-14:23", title: "車輛分期試算平台", type: "第 4 組", unit: "企劃", speaker: "莊姿婷", reviewers: "Steve、陳清龍" },
+    { time: "14:23-14:43", title: "中場休息", type: "活動流程", isBreak: true },
+    { time: "14:43-14:55", title: "管理部掌上通", type: "第 5 組", unit: "管理部", speaker: "廖本智、汪欣潔", reviewers: "Steve、陳煥文" },
+    { time: "14:55-15:07", title: "售電營運流程優化暨出單自動化", type: "第 6 組", unit: "潤電", speaker: "黃建璋", reviewers: "Steve、陳仕騏" },
+    { time: "15:07-15:19", title: "金流自駕-收款智能化｜從自動銷帳到資金預判", type: "第 7 組", unit: "資金部", speaker: "劉靖嫻", reviewers: "Steve、彭俊忠" },
+    { time: "15:19-15:31", title: "企業風險智能守衛系統", type: "第 8 組", unit: "風控作改", speaker: "陸依琦", reviewers: "Steve、邢合榮" },
+    { time: "15:31-15:51", title: "中場休息", type: "活動流程", isBreak: true },
+    { time: "15:51-16:03", title: "新戶開發加速器｜新戶商機導航與開發成果管理平台", type: "第 9 組", unit: "興業", speaker: "吳旻燁", reviewers: "Steve、張偉鈞" },
+    { time: "16:03-16:15", title: "家事法院死亡事件公告自動查詢與應用效能", type: "第 10 組", unit: "債權管理", speaker: "陳吉宏", reviewers: "Steve、蔡東原" },
+    { time: "16:15-16:27", title: "讓公文自己跑，別讓同仁一直跑", type: "第 11 組", unit: "經企公關部", speaker: "劉于慈", reviewers: "Steve、林瑜文" },
+    { time: "16:27-16:39", title: "公文雷達DocRadar", type: "第 12 組", unit: "作業服務部", speaker: "施佳莉、胡藏轅", reviewers: "Steve、李秋慧" },
+    { time: "16:39-16:49", title: "和運國際AI成果分享 - 方秋生", type: "活動流程" },
+    { time: "16:49-17:00", title: "董事長致詞+頒獎", type: "活動流程" }
   ],
   transport: [
     {

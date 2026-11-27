@@ -81,12 +81,12 @@ assets: {
 網站會在開啟「黑客松議程」頁面時，直接讀取專案根目錄的 `黑客松議程.xlsx`。
 
 1. 使用 Excel 開啟 `黑客松議程.xlsx`。
-2. 在「時間表」工作表編輯第 3–20 列。
+2. 在「時間表」工作表編輯第 3–21 列。
 3. 保留目前欄位位置：E 欄項次、F 欄時間、G 欄簡報單位、H 欄簡報者、I 欄題目、J–K 欄講評人。
 4. 儲存後將同一個 Excel 檔案提交並推送到 GitHub。
 5. GitHub Pages 更新後，使用者重新開啟頁面就會看到新議程。
 
-第 35 列以後的備註與草稿不會公開顯示。如果日後正式議程超過第 20 列，請同步修改 `assets/data.js` 中的 `agendaSource.lastRow`。網站仍保留 `agenda` 備援清單，僅在 Excel 無法讀取時顯示。
+第 35 列以後的備註與草稿不會公開顯示。如果日後正式議程超過第 21 列，請同步修改 `assets/data.js` 中的 `agendaSource.lastRow`。網站仍保留 `agenda` 備援清單，僅在 Excel 無法讀取時顯示。
 
 請注意：直接雙擊 `agenda.html` 時，瀏覽器不允許網頁自動讀取電腦上的相鄰 Excel，因此會顯示上次與 Excel 同步的完整備援議程。GitHub Pages 與本機 HTTP 預覽會優先即時讀取 Excel。若要在上線前確認最新 Excel，請用 README 的本機 HTTP 預覽方式，或請 Codex 更新同步備援資料。
 

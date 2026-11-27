@@ -1,0 +1,10 @@
+{
+  "projectId": "hotai-finance-2026-h2-hackathon",
+  "revision": "agenda-workbook-sha256-a96dfa513e6fd36a4c325c5b7af6e6b25ec015bb3cb1298ad355e7ce4b4ef27a",
+  "environment": "PROD",
+  "action": "deploy",
+  "target": "https://github.com/BIan-bot-001/2026-HFC-H2-Hackathon.git main / GitHub Pages",
+  "approver": "專案使用者",
+  "approved": true,
+  "gate": "G4"
+}

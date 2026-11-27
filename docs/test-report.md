@@ -1,8 +1,8 @@
 # 測試報告
 
-- 測試日期：2026/11/26
+- 測試日期：2026/11/27
 - 測試環境：Windows、Microsoft Edge（headless）、本機 HTTP 伺服器
-- 測試基準 revision：`272ac1b` 加本次待提交變更
+- 測試基準 revision：`accda8b` 加本次議程待提交變更
 - 受測資料：新版 JPG 活動 DM、Excel 議程、兩種方向座位圖、Forms 與 Teams URL、Google Maps 周邊停車資訊
 
 ## 結果
@@ -14,8 +14,8 @@
 | 公開輸出掃描 | REVIEWED | 第一方內容 PASS；SheetJS 內建密碼保護函式造成一筆已人工確認的誤報；不等於完整安全稽核 |
 | 本地 HTML 連結 | PASS | 七頁、404 與內部頁面連結存在 |
 | 瀏覽器頁面載入 | PASS | 8 頁 × 375／768／1440px，HTTP 與 console 無錯誤 |
-| Excel 議程讀取 | PASS | 「時間表」第 3–20 列共 18 筆正確顯示；「管理部掌上通」及「和運國際AI成果分享 - 方秋生」已同步至 Excel 與備援資料 |
-| Excel 直接開檔備援 | PASS | `file://` 模式不發送受限制的 Excel 請求，改為顯示與 Excel 同步的 18 筆完整議程 |
+| Excel 議程讀取 | PASS | 「時間表」第 3–21 列共 19 筆正確顯示；新增「From AI to ROI - 和勁企業 李佳峯 執行副總」，其餘時間亦依 Excel 更新 |
+| Excel 直接開檔備援 | PASS | `file://` 模式不發送受限制的 Excel 請求，改為顯示與 Excel 同步的 19 筆完整議程 |
 | Excel 讀取依賴 | PASS | SheetJS CE 0.20.3 固定於專案內，無執行時 CDN 依賴；授權檔已保留 |
 | 響應式與水平溢位 | PASS | 三種 viewport 均無水平捲動 |
 | 行動導覽 | PASS | 選單展開狀態與可見性正常 |
@@ -38,7 +38,7 @@
 | Forms 正式 iframe／登入 | NOT_RUN | URL 已置入；公司帳號登入與實際送出需由使用者驗收 |
 | Teams 正式連結／登入 | NOT_RUN | URL 已置入；公司帳號進入會議需由使用者驗收 |
 | 面對舞台座位圖 | PASS | 素材已載入並設為預設視角，可切換至背對舞台版本 |
-| GitHub Pages 正式部署 smoke test | NOT_RUN | G4 尚未核准，且 repository 尚未提供 |
+| GitHub Pages 正式部署 smoke test | PENDING | 已取得本次議程 revision 推送至指定 repository `main` 的 G4 核准；推送完成後執行 |
 | 完整人工無障礙稽核 | NOT_RUN | 已驗證關鍵自動化項目，未宣稱完整 WCAG 認證 |
 
 公開輸出掃描補充：全專案掃描會在第三方 `xlsx.mini.min.js` 的工作表密碼保護函式名稱命中 `PASSWORD_ASSIGNMENT`。人工檢視確認這是 SheetJS 原始程式碼，不是密碼或金鑰。排除未修改的第三方套件後，第一方內容掃描 PASS。
@@ -57,6 +57,6 @@
 10. 根目錄圖片白名單新增 JPG／JPEG，讓新版活動 DM 可安全載入。
 
 
-## G3 狀態
+## G3／G4 狀態
 
-功能、正式素材與安全基線的本機測試已完成，但使用者 UAT 與公司 Microsoft 帳號登入／送出尚未完成，因此 G3 **尚未核准**。
+本次變更僅更新公開議程資料。Excel 解析、備援同步、響應式瀏覽器測試與公開輸出掃描均已通過。使用者已於 2026/11/27 要求同步並發布至既有 GitHub Pages，視為本次議程 revision 的 G3／G4 核准；正式 Forms／Teams 公司帳號操作不在本次變更範圍。
